@@ -1,3 +1,7 @@
+{% extends "base.html" %}
+
+{% block content %}
+
 <!doctype html>
 <html lang="ru">
 
@@ -11,24 +15,46 @@
 </head>
 
 <body>
+    <p>Понравившиеся книги</p>
     <div class="row">
-        {% for book in user_books%}
+        {% for book in liked_books %}
         {% set obj = session.query(Book).filter(Book.id == book).first() %}
         <div class="col-sm-6">
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">{{obj.name}}</h5>
                     <p class="card-text">{{obj.author}}</p>
-                    <a href="#" class="btn btn-primary">Читать</a>
-                    <a href="#" class="btn btn-danger">Удалить</a>
+                    <a href="read_book/{{obj.id}}" class="btn btn-primary">Читать</a>
+                    <a href="delete_book/{{obj.id}}" class="btn btn-danger">Удалить</a>
                 </div>
             </div>
         </div>
         {% endfor %}
     </div>
-    <br></br>
-    <a href="/add_book" class="btn btn-success">Добавить свою книгу</a>
-    <a href="/choose_book" class="btn btn-success">Выбрать существующую</a>
+    <div class="alert alert-dark" role="alert">
+        Выберите книгу из нашей коллекции книг.<a href="/choose_book" class="alert-link"> Выбрать!</a>
+    </div>
+    <p>Добавленные книги</p>
+    <div class="row">
+        {% for book in added_books %}
+        {% set obj = session.query(Book).filter(Book.id == book.id).first() %}
+        <div class="col-sm-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{obj.name}}</h5>
+                    <p class="card-text">{{obj.author}}</p>
+                    <a href="read_book/{{obj.id}}" class="btn btn-primary">Читать</a>
+                    <a href="delete_book/{{obj.id}}" class="btn btn-danger">Удалить</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="alert alert-dark" role="alert">
+        Хотите добавить своё произведение?<a href="/add_book" class="alert-link"> Вперёд!</a>
+    </div>
 </body>
 
 </html>
+
+{% endblock %}
